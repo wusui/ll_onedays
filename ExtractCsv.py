@@ -1,11 +1,10 @@
 #!/usr/bin/python
-import os
-from CommonStuff import LLCSV_LOCATION
-
-def ExtractCsv(filen, player):
+""" TO DO: """
+def extract_csv(filen, player):
+    """ TO DO: """
     try:
-        with open(filen) as f:
-            data = f.read()
+        with open(filen) as fdesc:
+            data = fdesc.read()
             floc = data.find(',%s,' % player)
             if floc < 0:
                 return False
@@ -23,21 +22,9 @@ def ExtractCsv(filen, player):
                 if parts[2] == posno:
                     tiev += 1
                 if parts[1] == player:
-                    for i in range(5,17):
+                    for i in range(5, 17):
                         correct += int(parts[i])
             return [[int(posno), player, correct], len(records)-2, tiev]
     except FileNotFoundError:
         print("%s does not exist -- probably an error" % filen)
     return False
-
-if __name__ == '__main__':
-    testlist = ['lifeonearth',
-                'ogdennash',
-                'algorithms',
-                '90salternativemusic']
-    for filev in testlist:
-        fullpath = os.sep.join([LLCSV_LOCATION, filev])
-        fullpath = ''.join([fullpath, '.csv'])
-        from CommonStuff import HELLO_MY_NAME_IS
-        result = ExtractCsv(fullpath, HELLO_MY_NAME_IS)
-        print(result)
