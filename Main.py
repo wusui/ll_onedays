@@ -1,37 +1,43 @@
 #!/usr/bin/python
+""" TO DO: """
 import os
-import yaml
 import operator
+import yaml
+
 from CommonStuff import ALL_RECORDS
 from CommonStuff import SAVED_ONES
 from CommonStuff import LLCSV_LOCATION
+from CommonStuff import HELLO_MY_NAME_IS
 from CommonStuff import get_percentile
-from MakeTable import MakeTable
-from CollectData import CollectData
+from MakeTable import make_table
+from CollectData import collect_data
 
 MY_RECS = os.sep.join([LLCSV_LOCATION, 'my_records.txt'])
 OUR_RECS = os.sep.join([LLCSV_LOCATION, 'our_records.txt'])
 OUTFILE = os.sep.join([LLCSV_LOCATION, 'my_table.html'])
 ALLOUTFILE = os.sep.join([LLCSV_LOCATION, 'our_table.html'])
 
-def Display(header, data):
+def display(header, data):
+    """ TO DO: """
     resp = '\n\n\n            %s Finish\n\n' % header
-    for qr in range(1,13):
-        fline = '%d correct: %d percentile\n' % (qr, data[qr]['pctile'])
+    for quiz_rec in range(1, 13):
+        fline = '%d correct: %d percentile\n' % (quiz_rec,
+                                                 data[quiz_rec]['pctile'])
         resp = ''.join([resp, fline])
-        if len(data[qr]['data']) > 10:
+        if len(data[quiz_rec]['data']) > 10:
             resp = ''.join([resp, '    Lots\n'])
             continue
-        for quiz in data[qr]['data']:
+        for quiz in data[quiz_rec]['data']:
             sline = '    %s: %s' % (quiz['date'], quiz['name'])
             resp = ''.join([resp, sline])
             if 'people_total' in quiz.keys():
                 resp = ''.join([resp, ' (%d)' % quiz['people_total']])
-            resp = ''.join([resp,'\n'])
+            resp = ''.join([resp, '\n'])
     resp = ''.join([resp, '\n\n'])
     return resp
 
 def my_compute_inner(qdata, pctile, hlval, correct, comparer):
+    """ TO DO: """
     if not correct in hlval.keys():
         hlval[correct] = {'pctile': pctile, 'data': [qdata]}
         return
@@ -41,14 +47,16 @@ def my_compute_inner(qdata, pctile, hlval, correct, comparer):
         hlval[correct] = {'pctile': pctile, 'data': [qdata]}
 
 def my_compute(qdata, hival, loval):
+    """ TO DO: """
     pctile = get_percentile(qdata['total'], qdata['place'], qdata['tiecount'])
-    correct = qdata['correct']        
+    correct = qdata['correct']
     if correct == 0:
         return
     my_compute_inner(qdata, pctile, hival, correct, operator.gt)
     my_compute_inner(qdata, pctile, loval, correct, operator.lt)
 
 def our_compute_inner(qdata, hlval, indx, comparer):
+    """ TO DO: """
     for hlkey in qdata[0][indx].keys():
         dpart = {}
         dpart['correct'] = hlkey
@@ -65,20 +73,22 @@ def our_compute_inner(qdata, hlval, indx, comparer):
         if comparer(hlval[hlkey]['pctile'], lpercent):
             hlval[hlkey] = {'pctile': lpercent}
             hlval[hlkey]['data'] = [dpart]
-            
+
 def our_compute(qdata, hival, loval):
+    """ TO DO: """
     our_compute_inner(qdata, hival, 0, operator.lt)
     our_compute_inner(qdata, loval, 1, operator.gt)
-    
-def MyOnedays(player):
-    CollectData(player)
+
+def my_one_days(player):
+    """ TO DO: """
+    collect_data(player)
     lindex = 0
     if player == ' ':
         lindex = 1
-    yaml_files = [SAVED_ONES, ALL_RECORDS][lindex]
-    reports = [MY_RECS, OUR_RECS][lindex]
-    data_hndlr = [my_compute, our_compute][lindex]
-    outfile = [OUTFILE, ALLOUTFILE][lindex]
+    yaml_files = ALL_RECORDS if lindex else SAVED_ONES
+    reports = OUR_RECS if lindex else MY_RECS
+    data_hndlr = our_compute if lindex else my_compute
+    outfile = ALLOUTFILE if lindex else OUTFILE
     with open(yaml_files, 'r') as yaml_file:
         data = yaml.safe_load(yaml_file)
         hival = {}
@@ -86,13 +96,13 @@ def MyOnedays(player):
         for quiz in data.keys():
             qdata = data[quiz]
             data_hndlr(qdata, hival, loval)
-        tq = "Total quizzes played: %d" % len(data)
-        outstr = ''.join([tq, Display('Best', hival),Display('Worst', loval)])
-        with open(reports, 'w') as f:
-            f.write(outstr)
-        MakeTable(hival, loval, outfile, False)
+        tot_quiz = "Total quizzes played: %d" % len(data)
+        outstr = ''.join([tot_quiz, display('Best', hival),
+                          display('Worst', loval)])
+        with open(reports, 'w') as filedesc:
+            filedesc.write(outstr)
+        make_table(hival, loval, outfile, False)
 
 if __name__ == '__main__':
-    from CommonStuff import HELLO_MY_NAME_IS
-    MyOnedays(HELLO_MY_NAME_IS)
-    MyOnedays(' ')
+    my_one_days(HELLO_MY_NAME_IS)
+    my_one_days(' ')
