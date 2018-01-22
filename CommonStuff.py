@@ -22,19 +22,19 @@ http://learnedleague.com/oneday/paulmccartney.shmtl
 All oneday files are listed in https://learnedleague.com/oneday/
 
 TODO: Clean up this document and put in function. print(docf.__doc__)
-TODO: Argparse intial data.
 """
 import os
 import platform
 LLCSV_ALL = {'Windows': os.sep.join(['C:', 'Users', 'Warren', 'llcsvfiles']),
-             'Linux': os.sep.join(['/home','wusui','ll_my_onedays',
+             'Linux': os.sep.join(['/home', 'wusui', 'll_my_onedays',
                                    'llcsvfiles'])}
 LLCSV_LOCATION = LLCSV_ALL[platform.system()]
 HELLO_MY_NAME_IS = 'UsuiW'
-SAVED_ONES = os.sep.join([LLCSV_LOCATION,'result.yml'])
-ALL_RECORDS = os.sep.join([LLCSV_LOCATION,'allinfo.yml'])
+SAVED_ONES = os.sep.join([LLCSV_LOCATION, 'result.yml'])
+ALL_RECORDS = os.sep.join([LLCSV_LOCATION, 'allinfo.yml'])
 
 def get_percentile(total, place, ties):
+    """ TO DO: """
     numer = total - place - ties + 1
     if numer < 0:
         numer = 0
