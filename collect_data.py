@@ -3,14 +3,14 @@
 import os.path
 from datetime import datetime
 import yaml
-from ReadMainPage import main_read
-from AnalyzeThis import analyze_this
-from AllThings import find_best_n_worst
-from AllThings import all_csv
-from ExtractCsv import extract_csv
-from CommonStuff import SAVED_ONES
-from CommonStuff import ALL_RECORDS
-from CommonStuff import LLCSV_LOCATION
+from read_main_page import main_read
+from analyze_this import analyze_this
+from all_things import find_best_n_worst
+from all_things import all_csv
+from extract_csv import extract_csv
+from common_stuff import SAVED_ONES
+from common_stuff import ALL_RECORDS
+from common_stuff import LLCSV_LOCATION
 
 DATE_FMT = '%b %d, %Y'
 SWITCH_DATE = datetime.strptime('Jul 14, 2014', DATE_FMT)

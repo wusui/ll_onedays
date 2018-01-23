@@ -4,13 +4,13 @@ import os
 import operator
 import yaml
 
-from CommonStuff import ALL_RECORDS
-from CommonStuff import SAVED_ONES
-from CommonStuff import LLCSV_LOCATION
-from CommonStuff import HELLO_MY_NAME_IS
-from CommonStuff import get_percentile
-from MakeTable import make_table
-from CollectData import collect_data
+from common_stuff import ALL_RECORDS
+from common_stuff import SAVED_ONES
+from common_stuff import LLCSV_LOCATION
+from common_stuff import HELLO_MY_NAME_IS
+from common_stuff import get_percentile
+from make_table import make_table
+from collect_data import collect_data
 
 MY_RECS = os.sep.join([LLCSV_LOCATION, 'my_records.txt'])
 OUR_RECS = os.sep.join([LLCSV_LOCATION, 'our_records.txt'])

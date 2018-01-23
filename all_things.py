@@ -5,12 +5,13 @@ TO DO: fill me in.
 import operator
 from html.parser import HTMLParser
 import requests
-from CommonStuff import get_percentile
+from common_stuff import get_percentile
 
 class ParseBestW(HTMLParser):
     """
     TO DO: fill me in
     """
+    #pylint: disable=W0223
     def __init__(self):
         HTMLParser.__init__(self)
         self.person = ''

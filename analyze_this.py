@@ -5,6 +5,7 @@ import requests
 
 class MatchParse(HTMLParser):
     """ TO DO: """
+    #pylint: disable=W0223
     def __init__(self, player):
         """ TO DO: """
         HTMLParser.__init__(self)

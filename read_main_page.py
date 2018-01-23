@@ -4,6 +4,7 @@ from html.parser import HTMLParser
 import requests
 
 class MainParse(HTMLParser):
+    #pylint: disable=W0223
     """ TO DO: """
     def __init__(self):
         """ TO DO: """
