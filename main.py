@@ -84,7 +84,7 @@ def our_compute(qdata, hival, loval):
     our_compute_inner(qdata, loval, 1, operator.gt)
 
 
-def my_one_days(player, params):
+def one_days(player, params):
     """ TO DO: """
     collect_data(player, params)
     lindex = 0
@@ -150,9 +150,9 @@ def main_rtn():
             print("Don't know much about %s" % largs['explain'][0])
         return
     if largs['me']:
-        my_one_days(largs['user'], largs)
+        one_days(largs['user'], largs)
     if largs['all']:
-        my_one_days(' ', largs)
+        one_days(' ', largs)
     return
 
 if __name__ == "__main__":
