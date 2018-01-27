@@ -30,8 +30,10 @@ LLCSV_ALL = {'Windows': os.sep.join(['C:', 'Users', 'Warren', 'llcsvfiles']),
                                    'llcsvfiles'])}
 LLCSV_LOCATION = LLCSV_ALL[platform.system()]
 HELLO_MY_NAME_IS = 'UsuiW'
-SAVED_ONES = os.sep.join([LLCSV_LOCATION, 'result.yml'])
-ALL_RECORDS = os.sep.join([LLCSV_LOCATION, 'allinfo.yml'])
+EXT_FILES = ['my_records.txt', 'our_records.txt',
+             'my_table.html', 'our_table.html',
+             'my_result.yml', 'our_result.yml']
+
 
 def get_percentile(total, place, ties):
     """ TO DO: """
@@ -41,3 +43,21 @@ def get_percentile(total, place, ties):
     numer *= 100
     pctile = numer // total
     return pctile
+
+
+def doc_indata():
+    """ TO DO: """
+    print(doc_indata.__doc__)
+
+
+def doc_outdata():
+    """ TO DO: """
+    print(doc_outdata.__doc__)
+
+
+def doc_formats():
+    """ TO DO: formats """
+    print(doc_formats.__doc__)
+
+DOC_LINKS = {'in_data': doc_indata, 'out_data': doc_outdata,
+             'formats': doc_formats}

@@ -7,11 +7,12 @@ from html.parser import HTMLParser
 import requests
 from common_stuff import get_percentile
 
+
 class ParseBestW(HTMLParser):
     """
     TO DO: fill me in
     """
-    #pylint: disable=W0223
+    # pylint: disable=W0223
     def __init__(self):
         HTMLParser.__init__(self)
         self.person = ''
@@ -37,18 +38,22 @@ class ParseBestW(HTMLParser):
                 if apt[0] == 'class':
                     if apt[1] == 'std-midleft':
                         self.scan_for['pos'] = True
+
     def handle_data(self, data):
         """ TO DO: """
         def numbset(self, hlval, comparer):
             """ TO DO: """
             if not self.intv['right'] in hlval:
                 if self.intv['right'] > 0:
-                    hlval[self.intv['right']] = [self.intv['posis'], [self.person]]
+                    hlval[self.intv['right']] = [self.intv['posis'],
+                                                 [self.person]]
             else:
                 if comparer(hlval[self.intv['right']][0], self.intv['posis']):
-                    hlval[self.intv['right']] = [self.intv['posis'], [self.person]]
+                    hlval[self.intv['right']] = [self.intv['posis'],
+                                                 [self.person]]
                 if hlval[self.intv['right']][0] == self.intv['posis']:
                     hlval[self.intv['right']][1].append(self.person)
+
         def scan_set(self, data):
             """ TO DO: """
             if self.scan_for['name']:
@@ -90,6 +95,7 @@ class ParseBestW(HTMLParser):
                 self.intv['wrong'] = 0
         scan_set(self, data)
 
+
 def find_best_n_worst(filen, player):
     """ TO DO: """
     if player != ' ':
@@ -101,13 +107,16 @@ def find_best_n_worst(filen, player):
         place = parser.hinumbs[coransval][0]
         ties = parser.ties[place]
         lplace = parser.lonumbs[coransval][0]
-        parser.hinumbs[coransval][0] = get_percentile(parser.intv['size'], place, ties)
-        parser.lonumbs[coransval][0] = get_percentile(parser.intv['size'], lplace, ties)
+        parser.hinumbs[coransval][0] = get_percentile(parser.intv['size'],
+                                                      place, ties)
+        parser.lonumbs[coransval][0] = get_percentile(parser.intv['size'],
+                                                      lplace, ties)
     return [parser.hinumbs, parser.lonumbs]
+
 
 def all_csv_in(hlcsv, correct, pct, parts, comparer):
     """ TO DO: """
-    if not correct in hlcsv.keys():
+    if correct not in hlcsv.keys():
         hlcsv[correct] = [pct, [parts[1]]]
     else:
         if pct == hlcsv[correct][0]:
@@ -115,39 +124,41 @@ def all_csv_in(hlcsv, correct, pct, parts, comparer):
         if comparer(pct, hlcsv[correct][0]):
             hlcsv[correct] = [pct, [parts[1]]]
 
+
 def all_csv(filen, player):
     """ TO DO: """
+    if filen.find('beforeandaftermusicals') > 0:
+        return False
     if player != ' ':
         return False
     hicsv = {}
     locsv = {}
-    with open(filen) as fileobj:
-        records = fileobj.read().split('\n')
-        total = len(records) - 2
-        ties = {}
-        for record in records[1:]:
-            parts = record.split(',')
-            if len(parts) < 2:
-                continue
-            indx = int(parts[2])
-            if indx not in ties.keys():
-                ties[indx] = 1
-            else:
-                ties[indx] += 1
-        for record in records:
-            correct = 0
-            parts = record.split(',')
-            if parts[0] == 'Season':
-                continue
-            if len(parts) < 2:
-                continue
-            for i in range(5, 17):
-                correct += int(parts[i])
-            if correct == 0:
-                continue
-            place = int(parts[2])
-            pct = get_percentile(total, place, ties[place])
-            all_csv_in(hicsv, correct, pct, parts, operator.gt)
-            all_csv_in(locsv, correct, pct, parts, operator.lt)
-        return [hicsv, locsv]
-    return False
+    data = requests.get(filen)
+    records = data.text.split('\n')
+    total = len(records) - 2
+    ties = {}
+    for record in records[1:]:
+        parts = record.split(',')
+        if len(parts) < 2:
+            continue
+        indx = int(parts[2])
+        if indx not in ties.keys():
+            ties[indx] = 1
+        else:
+            ties[indx] += 1
+    for record in records:
+        correct = 0
+        parts = record.split(',')
+        if parts[0] == 'Season':
+            continue
+        if len(parts) < 2:
+            continue
+        for i in range(5, 17):
+            correct += int(parts[i])
+        if correct == 0:
+            continue
+        place = int(parts[2])
+        pct = get_percentile(total, place, ties[place])
+        all_csv_in(hicsv, correct, pct, parts, operator.gt)
+        all_csv_in(locsv, correct, pct, parts, operator.lt)
+    return [hicsv, locsv]

@@ -3,9 +3,10 @@
 from html.parser import HTMLParser
 import requests
 
+
 class MatchParse(HTMLParser):
     """ TO DO: """
-    #pylint: disable=W0223
+    # pylint: disable=W0223
     def __init__(self, player):
         """ TO DO: """
         HTMLParser.__init__(self)
@@ -34,6 +35,7 @@ class MatchParse(HTMLParser):
                     if apt[1] == 'std-midleft':
                         self.lval['counter'] += 1
                         self.scan_for['pos'] = True
+
     def handle_data(self, data):
         """ TO DO: """
         if self.scan_for['scores']:
@@ -71,6 +73,7 @@ class MatchParse(HTMLParser):
                     return
                 self.currentdata.append(posis)
                 self.scan_for['name'] = True
+
 
 def analyze_this(filen, player):
     """ TO DO: """

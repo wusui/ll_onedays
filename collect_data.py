@@ -8,19 +8,20 @@ from analyze_this import analyze_this
 from all_things import find_best_n_worst
 from all_things import all_csv
 from extract_csv import extract_csv
-from common_stuff import SAVED_ONES
-from common_stuff import ALL_RECORDS
-from common_stuff import LLCSV_LOCATION
+
 
 DATE_FMT = '%b %d, %Y'
 SWITCH_DATE = datetime.strptime('Jul 14, 2014', DATE_FMT)
 USE_CSV_DATE = datetime.strptime('Jan 1, 2018', DATE_FMT)
 LFORMAT = 'https://learnedleague.com/oneday/results.php?%s&1'
+OFORMAT = 'http://www.learnedleague.com/oneday/csv'
+
 
 def all_merge(result, retval, quiz):
     """ TO DO: """
     retval[quiz[1]] = [result, quiz]
     print(retval[quiz[1]])
+
 
 def handle_collection(result, retval, quiz):
     """ TO DO: """
@@ -36,6 +37,7 @@ def handle_collection(result, retval, quiz):
         retval[quiz[1]]['tiecount'] = result[2]
         print(retval[quiz[1]])
 
+
 def do_collection(name, anal_func, setdata_func, csv_func):
     """ TO DO: """
     retval = {}
@@ -48,7 +50,7 @@ def do_collection(name, anal_func, setdata_func, csv_func):
         qdate = datetime.strptime(quiz[2], DATE_FMT)
         if qdate > USE_CSV_DATE:
             csvfile = quiz[0].split('?')[-1]
-            fullpath = os.sep.join([LLCSV_LOCATION, csvfile])
+            fullpath = '/'.join([OFORMAT, csvfile])
             fullpath = ''.join([fullpath, '.csv'])
             result = csv_func(fullpath, name)
         else:
@@ -62,13 +64,15 @@ def do_collection(name, anal_func, setdata_func, csv_func):
         setdata_func(result, retval, quiz)
     return retval
 
-def collect_data(name):
+
+def collect_data(name, param):
     """ TO DO: """
     progrm = 0
     if name == ' ':
         progrm = 1
-    packgs = [[analyze_this, handle_collection, extract_csv, SAVED_ONES],
-              [find_best_n_worst, all_merge, all_csv, ALL_RECORDS]]
+    packgs = [[analyze_this, handle_collection, extract_csv,
+               param['my_result']],
+              [find_best_n_worst, all_merge, all_csv, param['our_result']]]
     parms = packgs[progrm]
     if os.path.isfile(parms[3]):
         print('%s already exists' % parms[3])

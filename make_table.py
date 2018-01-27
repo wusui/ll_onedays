@@ -8,6 +8,7 @@ HEADER_PARTS = ['<table border="1">',
 HEADER = ''.join(HEADER_PARTS)
 LINE_TEMPLATE = '<tr><td>%d</td><td>%d pctile</td><td>%d pctile</td></tr>'
 
+
 def make_table(hival, loval, outfile, use_brackets):
     """ TO DO: """
     fstring = HEADER
