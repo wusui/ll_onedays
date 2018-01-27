@@ -6,7 +6,7 @@ import operator
 import argparse
 import yaml
 
-from common_stuff import LLCSV_LOCATION
+from common_stuff import LLSAVE_LOCATION
 from common_stuff import HELLO_MY_NAME_IS
 from common_stuff import EXT_FILES
 from common_stuff import DOC_LINKS
@@ -113,8 +113,8 @@ def my_one_days(player, params):
 def get_args(cmd_line):
     """ TO DO: """
     parser = argparse.ArgumentParser()
-    parser.add_argument('-d', '--dir', nargs='?', const=LLCSV_LOCATION,
-                        default=LLCSV_LOCATION,
+    parser.add_argument('-d', '--dir', nargs='?', const=LLSAVE_LOCATION,
+                        default=LLSAVE_LOCATION,
                         help='Location of .csv and files produced')
     parser.add_argument('-u', '--user', nargs='?', const=HELLO_MY_NAME_IS,
                         default=HELLO_MY_NAME_IS,
@@ -126,7 +126,7 @@ def get_args(cmd_line):
     parser.add_argument('-b', '--bracket', action='store_true',
                         help='set square brackets in files produced')
     parser.add_argument('-x', '--explain', nargs=1,
-                        help="in-data|out-data|formats")
+                        help="in_data|out_data|formats")
     info = parser.parse_args(cmd_line)
     if not info.me and not info.all:
         info.me = True

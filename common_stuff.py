@@ -3,7 +3,7 @@
 Figure out stats about one user's onedays.
 
 Oneday information extracted after January 1, 2018 will appear in .csv
-files in llcsvfiles.
+files in llsvfiles.
 
 Oneday information extracted between July 31, 2014 and January 1, 2018 have All
 player tabs.  To extract information, use:
@@ -25,10 +25,10 @@ TODO: Clean up this document and put in function. print(docf.__doc__)
 """
 import os
 import platform
-LLCSV_ALL = {'Windows': os.sep.join(['C:', 'Users', 'Warren', 'llcsvfiles']),
+LLSAVE_ALL = {'Windows': os.sep.join(['C:', 'Users', 'Warren', 'llsvfiles']),
              'Linux': os.sep.join(['/home', 'wusui', 'll_my_onedays',
-                                   'llcsvfiles'])}
-LLCSV_LOCATION = LLCSV_ALL[platform.system()]
+                                   'llsvfiles'])}
+LLSAVE_LOCATION = LLSAVE_ALL[platform.system()]
 HELLO_MY_NAME_IS = 'UsuiW'
 EXT_FILES = ['my_records.txt', 'our_records.txt',
              'my_table.html', 'our_table.html',
