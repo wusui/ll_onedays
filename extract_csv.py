@@ -1,10 +1,27 @@
 #!/usr/bin/python
-""" TO DO: """
+"""
+Extract individual user data if it is in a csv file.
+"""
 import requests
 
 
 def extract_csv(filen, player):
-    """ TO DO: """
+    """
+    Extract individual user data if it is in a csv file.
+
+    Input:
+        filen -- csv file to be read (http address)
+        player -- player name.
+
+    Returns:
+        A record containing three values.
+        1. A list of player information.  This consists of:
+            a. finishing position
+            b. name
+            c. number of questions answered correctly
+        2. Total number of players in this quiz.
+        3. The number of players that this person tied.
+    """
     data = requests.get(filen)
     floc = data.text.find(',%s,' % player)
     if floc < 0:

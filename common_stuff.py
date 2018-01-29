@@ -18,8 +18,8 @@ doc_funtions: Give further explanation of things when the -x parameter is
 import os
 import platform
 LLSAVE_ALL = {'Windows': os.sep.join(['C:', 'Users', 'Warren', 'llsvfiles']),
-             'Linux': os.sep.join(['/home', 'wusui', 'll_my_onedays',
-                                   'llsvfiles'])}
+              'Linux': os.sep.join(['/home', 'wusui', 'll_my_onedays',
+                                    'llsvfiles'])}
 LLSAVE_LOCATION = LLSAVE_ALL[platform.system()]
 HELLO_MY_NAME_IS = 'UsuiW'
 EXT_FILES = ['my_records.txt', 'our_records.txt',

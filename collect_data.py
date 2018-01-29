@@ -1,5 +1,10 @@
 #!/usr/bin/python
-""" TO DO: """
+"""
+Extract the day from html pages.  This code mostly keeps track
+of both single users and all users, and calls the appropriate
+data extraction routines based on the type of user and the date
+of each quiz.
+"""
 import os.path
 from datetime import datetime
 import yaml
@@ -18,13 +23,33 @@ OFORMAT = 'http://www.learnedleague.com/oneday/csv'
 
 
 def all_merge(result, retval, quiz):
-    """ TO DO: """
+    """
+    Merge data for a quiz for all users
+
+    Input:
+        result -- quiz data parsed
+        retval -- list to be updated
+        quiz -- individual quiz data
+
+    Returns:
+        retval is updated  with the result and quiz information.
+    """
     retval[quiz[1]] = [result, quiz]
     print(retval[quiz[1]])
 
 
 def handle_collection(result, retval, quiz):
-    """ TO DO: """
+    """
+    Merge data for a quiz for an individual user
+
+    Input:
+        result -- quiz data parsed
+        retval -- list to be updated
+        quiz -- individual quiz data
+
+    Returns:
+        retval is updated  with the result and quiz information.
+    """
     if not result:
         print("You did not play %s" % quiz[1])
     else:
@@ -39,7 +64,16 @@ def handle_collection(result, retval, quiz):
 
 
 def do_collection(name, anal_func, setdata_func, csv_func):
-    """ TO DO: """
+    """
+    Input:
+        name -- user name or blank for all users.
+        anal_func -- analysis function (see analyze_this for individual
+                     users, and all_things for all users
+        setdata_function -- local handle_collection for individual users
+                            or all_merge for all users
+        csv_func -- csv reading/parsing function for either individual users
+                    or all users.
+    """
     retval = {}
     quizzes = main_read()
     for quiz in quizzes:
@@ -66,7 +100,18 @@ def do_collection(name, anal_func, setdata_func, csv_func):
 
 
 def collect_data(name, param):
-    """ TO DO: """
+    """
+    Collect data, switching routines based on whether or not individual
+    players or all players data is being collected.
+
+    Input:
+        name -- user's name (or blank if all users wanted)
+        param -- parameters extracted from the command line
+
+    Returns:
+        No return value, but the appropriate yaml file is written
+        (my_result.yaml or our_result.yaml)
+    """
     progrm = 0
     if name == ' ':
         progrm = 1

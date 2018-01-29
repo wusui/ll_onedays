@@ -1,5 +1,10 @@
 #!/usr/bin/python
-""" TO DO: """
+"""
+Main routine
+
+In addition to organizing the data collected, this file also contains the
+command line parser and output string formatter for *_records.txt files.
+"""
 import os
 import sys
 import operator
@@ -16,7 +21,18 @@ from collect_data import collect_data
 
 
 def display(header, data):
-    """ TO DO: """
+    """
+    Generate the text of results found.  This will be returned and later saved
+    in my_records.txt or our_records.txt
+
+    Input:
+        header -- Type of data ('best' return or 'worst' return)
+        data -- dictionary of results collect in hival or loval dictionaries
+                (see use of hival and loval in the routines below)
+
+    Returns:
+        Human readable string to be stored in txt files.
+    """
     resp = '\n\n\n            %s Finish\n\n' % header
     for quiz_rec in range(1, 13):
         fline = '%d correct: %d percentile\n' % (quiz_rec,
@@ -36,7 +52,19 @@ def display(header, data):
 
 
 def my_compute_inner(qdata, pctile, hlval, correct, comparer):
-    """ TO DO: """
+    """
+    Do the actual saving of best and worst return values for all users.
+
+    Input:
+        qdata -- List of quiz data
+        pctile -- percentile we are in for this quiz
+        hlval -- dictionary to be initialized with best or worst returns.
+        indx -- 0 if best returns, 1 if worst returns.
+        comparer -- operator.lt or operator.gt (depending on best or worst)
+
+    Returns:
+        hlval is updated.
+    """
     if correct not in hlval.keys():
         hlval[correct] = {'pctile': pctile, 'data': [qdata]}
         return
@@ -47,7 +75,23 @@ def my_compute_inner(qdata, pctile, hlval, correct, comparer):
 
 
 def my_compute(qdata, hival, loval):
-    """ TO DO: """
+    """
+    Calculate a percentile value for the user's game specified.
+    Call my_compute_inner separately with hival and loval.
+
+    Input:
+        qdata -- list of quiz data extracted from the information saved in
+                 the appropriate yaml file.
+        hival -- dictionary where the best return values found are kept.  This
+                 structure will end up containing, for each number of questions
+                 missed, a percentile value and a list of quiz records with
+                 the best return.
+        loval -- dictionary where the worst return values found are kept.  It
+                 has the same format as hival.
+
+    Returns:
+        hival and loval are updated.
+    """
     pctile = get_percentile(qdata['total'], qdata['place'], qdata['tiecount'])
     correct = qdata['correct']
     if correct == 0:
@@ -57,7 +101,18 @@ def my_compute(qdata, hival, loval):
 
 
 def our_compute_inner(qdata, hlval, indx, comparer):
-    """ TO DO: """
+    """
+    Do the actual saving of best and worst return values for all users.
+
+    Input:
+        qdata -- List of quiz data
+        hlval -- dictionary to be initialized with best or worst returns.
+        indx -- 0 if best returns, 1 if worst returns.
+        comparer -- operator.lt or operator.gt (depending on best or worst)
+
+    Returns:
+        hlval is updated.
+    """
     if not qdata[0]:
         return
     for hlkey in qdata[0][indx].keys():
@@ -79,21 +134,49 @@ def our_compute_inner(qdata, hlval, indx, comparer):
 
 
 def our_compute(qdata, hival, loval):
-    """ TO DO: """
+    """
+    Call our_compute_inner separately with hival and loval.
+
+    Input:
+        qdata -- list of quiz data extracted from the information saved in
+                 the appropriate yaml file.
+        hival -- dictionary where the best return values found are kept.  This
+                 structure will end up containing, for each number of questions
+                 missed, a percentile value and a list of quiz records with
+                 the best return.
+        loval -- dictionary where the worst return values found are kept.  It
+                 has the same format as hival.
+
+    Returns:
+        hival and loval are updated.
+    """
     our_compute_inner(qdata, hival, 0, operator.lt)
     our_compute_inner(qdata, loval, 1, operator.gt)
 
 
 def one_days(player, params):
-    """ TO DO: """
+    """
+    Main routine.
+
+    First call collect_data to generate the appropriate yaml file, if needed.
+
+    Then loop through all entries in the yaml file to find the quizzes with the
+    best and worst returns. Write the appropriate text file.
+
+    Finally call make_table to generate the appropriate html file.
+
+    Input:
+        player: Individual player name. Blank means all players.
+        params: parsed command line parameters, and file names
+
+    Output:
+        no data returned.  Appropriate yml, txt, and html files are generated.
+    """
     collect_data(player, params)
-    lindex = 0
-    if player == ' ':
-        lindex = 1
-    yaml_files = params['our_result'] if lindex else params['my_result']
-    reports = params['our_records'] if lindex else params['my_records']
-    data_hndlr = our_compute if lindex else my_compute
-    outfile = params['our_table'] if lindex else params['my_table']
+    yaml_files = params['our_result'] if player == ' ' else params['my_result']
+    reports = params['our_records'] if player == ' ' else params['my_records']
+    data_hndlr = our_compute if player == ' ' else my_compute
+    outfile = params['our_table'] if player == ' ' else params['my_table']
     with open(yaml_files, 'r') as yaml_file:
         data = yaml.safe_load(yaml_file)
         vals = [{}, {}]
@@ -111,11 +194,24 @@ def one_days(player, params):
 
 
 def get_args(cmd_line):
-    """ TO DO: """
+    """
+    Parse the command line.  Command line options are described by the
+    -h or --help option.
+
+    If neither 'me' or 'all' option is specified, both are set.
+    Also add file names as keys into the parser Namespace, where each
+    entry points to the physical full path where the file is located.
+
+    Input:
+        cmd_line: arguments passed to the main program (argv[0] missing)
+
+    Returns: dictionary of parsed argument values, and entries of files
+             to be generated.
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument('-d', '--dir', nargs='?', const=LLSAVE_LOCATION,
                         default=LLSAVE_LOCATION,
-                        help='Location of .csv and files produced')
+                        help='Location of files produced')
     parser.add_argument('-u', '--user', nargs='?', const=HELLO_MY_NAME_IS,
                         default=HELLO_MY_NAME_IS,
                         help='individual learned league user')
@@ -141,7 +237,14 @@ def get_args(cmd_line):
 
 
 def main_rtn():
-    """ TO DO: """
+    """
+    Wrapper for parser and one_day calls.
+    After doing command line parsing, handle the explanation calls separately
+    from the one_day calls.  Perform one_day calls for individual user and/or
+    for all users.  Output files end up getting stored in the directory
+    specified by the dir option, or in LlSAVE_LOCATION in common_stuff by
+    default.
+    """
     largs = get_args(sys.argv[1:])
     if largs['explain']:
         try:
